@@ -247,8 +247,14 @@
           <select class="input" data-cfg-sel="cache_k"><option>f16</option><option>q8_0</option><option>q4_0</option></select>
           <label>KV 缓存 V 类型</label>
           <select class="input" data-cfg-sel="cache_v"><option>f16</option><option>q8_0</option><option>q4_0</option></select>
+          <label>思考力度</label>
+          <select class="input" data-cfg-sel="think">
+            <option value="default">标准 (完整思考)</option>
+            <option value="low">低 (快速回答)</option>
+            <option value="off">关闭 (直接回答)</option>
+          </select>
         </div>
-        <p class="hint">ctx 越大 KV 缓存占用越高; 缓存类型改 q8_0 可将其减半, 长上下文建议开启</p>
+        <p class="hint">ctx 越大 KV 缓存占用越高; 缓存类型改 q8_0 可将其减半, 长上下文建议开启。思考力度改动即时生效, 无需重启服务 (此模型模板仅支持 标准/低/关闭 三档)</p>
       </div>
 
       <div class="card">

@@ -67,6 +67,7 @@ DEFAULT_CONFIG = {
     "flash": True, "mlock": False, "novision": True,
     "temp": 1.0, "top_p": 0.95, "top_k": 20, "min_p": 0.05,
     "repeat": 1.0, "presence": 0.0,
+    "think": "default",
 }
 
 
@@ -716,6 +717,11 @@ class Api:
             "repeat_penalty": float(c.get("repeat", 1.0)),
             "presence_penalty": float(c.get("presence", 0.0)),
         }
+        think = str(c.get("think", "default"))
+        if think == "off":
+            body["chat_template_kwargs"] = {"enable_thinking": False}
+        elif think == "low":
+            body["reasoning_effort"] = "low"
         if params:
             body.update(params)
 
