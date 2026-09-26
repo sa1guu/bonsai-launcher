@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Bonsai Launcher</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ============ 左侧导航 ============ -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L3 7v10l9 5 9-5V7l-9-5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 22V12M12 12L3 7m9 5l9-5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="logo-text">
+        <h1>Bonsai AI</h1>
+        <p>Private · Safe · Powerful</p>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-page="chat">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M21 12a8 8 0 01-8 8H4l2-3a8 8 0 1115-5z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        对话助手</button>
+      <button class="nav-item" data-page="models">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M21 8l-9-5-9 5v8l9 5 9-5V8z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M3 8l9 5 9-5M12 13v8" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+        模型管理</button>
+      <button class="nav-item" data-page="params">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 8h10M18 8h2M4 16h2M10 16h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="16" cy="8" r="2.2" stroke="currentColor" stroke-width="1.7"/><circle cx="8" cy="16" r="2.2" stroke="currentColor" stroke-width="1.7"/></svg>
+        参数调节</button>
+      <button class="nav-item" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 15a1.7 1.7 0 00.3 1.9l.1.1a2 2 0 11-2.9 2.9l-.1-.1a1.7 1.7 0 00-1.9-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1-1.6 1.7 1.7 0 00-1.9.3l-.1.1a2 2 0 11-2.9-2.9l.1-.1a1.7 1.7 0 00.3-1.9 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.6-1 1.7 1.7 0 00-.3-1.9l-.1-.1a2 2 0 112.9-2.9l.1.1a1.7 1.7 0 001.9.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.9-.3l.1-.1a2 2 0 112.9 2.9l-.1.1a1.7 1.7 0 00-.3 1.9v.1a1.7 1.7 0 001.5 1h.1a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z" stroke="currentColor" stroke-width="1.5"/></svg>
+        系统设置</button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="chip-art"></div>
+      <strong>本地部署 · 数据不出端</strong>
+      <span>你的数据 只属于你</span>
+    </div>
+  </aside>
+
+  <!-- ============ 主区域 ============ -->
+  <main class="main">
+    <header class="topbar">
+      <h2 id="page-title">对话助手</h2>
+      <div class="topbar-right">
+        <div class="status-pill" id="status-pill">
+          <span class="dot"></span><span id="status-text">服务未启动</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ======== 对话助手 ======== -->
+    <section class="page active" id="page-chat">
+      <div class="chat-grid">
+        <div class="chat-col">
+          <div class="card model-banner">
+            <div class="model-badge"><span>B2</span></div>
+            <div class="model-meta">
+              <div class="model-name">Ternary-Bonsai-2-27B <em class="tag">本地部署</em></div>
+              <div class="model-sub" id="banner-model-sub">27B · PTQ1_0 三值量化 · 约 5.9 GB</div>
+            </div>
+            <div class="stat-group">
+              <div class="stat"><label>GPU 使用率</label><b id="stat-gpu-util">--</b>
+                <div class="meter"><i id="meter-gpu"></i></div></div>
+              <div class="stat"><label>显存占用</label><b id="stat-vram">--</b>
+                <div class="meter"><i id="meter-vram"></i></div></div>
+              <div class="stat"><label>推理速度</label><b id="stat-tps">--</b>
+                <div class="meter"><i id="meter-tps"></i></div></div>
+            </div>
+          </div>
+
+          <div class="card chat-card">
+            <div class="chat-scroll" id="chat-scroll">
+              <div class="chat-empty" id="chat-empty">
+                <div class="empty-logo">B2</div>
+                <p>你好, 我是本地运行的 Bonsai 2 27B</p>
+                <span>所有对话都在本机完成, 数据不出端</span>
+              </div>
+            </div>
+            <div class="chat-inputbar">
+              <textarea id="chat-input" rows="2" placeholder="请输入你的问题...  (Enter 发送, Shift+Enter 换行)"></textarea>
+              <div class="input-actions">
+                <button class="btn-ghost" id="btn-clear-chat" title="清空对话">清空</button>
+                <button class="btn-ghost hidden" id="btn-stop-gen">停止</button>
+                <button class="btn-send" id="btn-send" title="发送">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧快速设置 -->
+        <div class="chat-side">
+          <div class="card">
+            <div class="card-head"><h3>快速参数</h3><button class="link" data-goto="params">高级参数</button></div>
+            <div class="slider-row"><label>Temperature</label><input type="range" min="0" max="2" step="0.05" data-cfg="temp"><span class="sval" data-sval="temp"></span></div>
+            <div class="slider-row"><label>Top P</label><input type="range" min="0.1" max="1" step="0.01" data-cfg="top_p"><span class="sval" data-sval="top_p"></span></div>
+            <div class="slider-row"><label>Top K</label><input type="range" min="1" max="100" step="1" data-cfg="top_k"><span class="sval" data-sval="top_k"></span></div>
+            <div class="slider-row"><label>Min P</label><input type="range" min="0" max="1" step="0.01" data-cfg="min_p"><span class="sval" data-sval="min_p"></span></div>
+            <div class="slider-row"><label>重复惩罚</label><input type="range" min="0.5" max="2" step="0.05" data-cfg="repeat"><span class="sval" data-sval="repeat"></span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>本地部署管理</h3><span class="tag" id="side-srv-tag">未启动</span></div>
+            <div class="kv"><label>模型文件</label><div class="kv-val ellipsis" id="side-model-path">未导入</div></div>
+            <div class="kv"><label>显存占用</label>
+              <div class="meter big"><i id="side-meter-vram"></i></div>
+              <div class="kv-val" id="side-vram-text">--</div></div>
+            <div class="btn-row">
+              <button class="btn-primary" id="side-btn-start">启动服务</button>
+              <button class="btn-danger hidden" id="side-btn-stop">停止服务</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>系统信息</h3></div>
+            <div class="sysinfo">
+              <div><i>OS</i><b id="sys-os">--</b></div>
+              <div><i>GPU</i><b id="sys-gpu">--</b></div>
+              <div><i>CUDA</i><b id="sys-cuda">--</b></div>
+              <div><i>内存</i><b id="sys-ram">--</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== 模型管理 ======== -->
+    <section class="page" id="page-models">
+      <div class="cards-2col">
+        <div class="card">
+          <div class="card-head"><h3>硬件识别</h3><button class="link" id="btn-re-detect">重新检测</button></div>
+          <div class="hw-vendor" id="hw-vendor">检测中...</div>
+          <div class="hw-names" id="hw-names"></div>
+          <div class="kv"><label>驱动 CUDA 版本</label><div class="kv-val" id="hw-cuda">--</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>推理运行时 (llama.cpp · PrismML)</h3><span class="tag" id="rt-tag">未安装</span></div>
+          <div class="kv"><label>后端选择</label>
+            <select id="sel-backend" class="input">
+              <option value="auto">自动检测</option>
+              <option value="cuda">NVIDIA CUDA</option>
+              <option value="vulkan">AMD / Intel Vulkan</option>
+              <option value="hip">AMD HIP (Radeon)</option>
+              <option value="cpu">纯 CPU</option>
+            </select></div>
+          <div class="dl-progress hidden" id="dl-wrap">
+            <div class="meter big"><i id="dl-bar"></i></div>
+            <div class="dl-text" id="dl-text"></div>
+          </div>
+          <div class="kv"><label>当前版本</label><div class="kv-val" id="rt-version">--</div></div>
+          <div class="kv"><label>最新版本</label><div class="kv-val" id="rt-latest">--</div></div>
+          <div class="btn-row">
+            <button class="btn-primary" id="btn-dl-runtime">下载 / 更新运行时</button>
+            <button class="btn-ghost" id="btn-check-update">检查更新</button>
+          </div>
+          <div class="kv"><label>安装路径</label><div class="kv-val ellipsis" id="rt-path">--</div></div>
+          <p class="hint">经 GitHub 国内镜像加速下载, 自动按硬件选择 CUDA / Vulkan / HIP / CPU 版本。已是最新时会跳过下载, 旧版本自动升级并清理旧文件。</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>系统依赖检测</h3><button class="link" id="btn-recheck-deps">重新检测</button></div>
+          <div id="deps-list"></div>
+          <p class="hint">迁移到新电脑时先看这里: 全部绿色即可直接运行, 缺失项点名称跳转到官方下载页。</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>模型文件</h3><span class="tag warn" id="model-tag">未导入</span></div>
+          <p class="hint">应用不下载 / 不内置任何模型。点下方按钮选择你 U 盘里的 <code>Ternary-Bonsai-2-27B-PTQ1_0.gguf</code> 即可, 路径会自动记住。</p>
+          <div class="btn-row">
+            <button class="btn-primary" id="btn-import-model">导入模型文件...</button>
+          </div>
+          <div class="kv"><label>当前模型</label><div class="kv-val ellipsis" id="model-path">--</div></div>
+          <div class="kv"><label>文件大小</label><div class="kv-val" id="model-size">--</div></div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>服务控制</h3><span class="tag" id="srv-tag">未启动</span></div>
+          <div class="kv"><label>API 地址 (OpenAI 兼容)</label>
+            <div class="kv-val api-url" id="api-url">http://127.0.0.1:8080/v1</div></div>
+          <div class="btn-row">
+            <button class="btn-primary" id="btn-start">启动服务</button>
+            <button class="btn-danger hidden" id="btn-stop">停止服务</button>
+            <button class="btn-ghost" id="btn-webui">打开 WebUI</button>
+            <button class="btn-ghost" id="btn-copy-api">复制 API 地址</button>
+          </div>
+          <p class="hint">启动后本机任何支持 OpenAI SDK 的应用把 base_url 指向上面的地址即可调用</p>
+        </div>
+      </div>
+
+      <div class="card log-card">
+        <div class="card-head"><h3>运行日志</h3><button class="link" id="btn-clear-log">清空</button></div>
+        <pre class="log-view" id="log-view"></pre>
+      </div>
+    </section>
+
+    <!-- ======== 参数调节 ======== -->
+    <section class="page" id="page-params">
+      <div class="card">
+        <div class="card-head"><h3>预设方案</h3><span class="tag" id="preset-tag">点击卡片应用</span></div>
+        <div class="preset-grid">
+          <button class="preset-card" data-preset="min">
+            <b>省显存 Minimum</b>
+            <span>ctx 4K · KV q8_0 · 日常轻量对话</span>
+          </button>
+          <button class="preset-card" data-preset="chat">
+            <b>日常对话 Chat</b>
+            <span>ctx 8K · KV f16 · 质量与占用均衡</span>
+          </button>
+          <button class="preset-card" data-preset="agent">
+            <b>长上下文 Agent</b>
+            <span>ctx 32K · KV q8_0 · 长文档 / 智能体</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>上下文与显存</h3><span class="tag">官方思考模式推荐</span></div>
+
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>上下文长度 ctx</b><span>注意力 KV 缓存的最大 token 窗口 (原生支持 262K)</span></div>
+            <div class="pval"><b data-sval="ctx">8K</b><em class="pbadge" data-badge="ctx">tokens</em></div>
+          </div>
+          <input type="range" min="1024" max="262144" step="1024" data-cfg="ctx">
+          <div class="pslider-ends"><span>1K</span><span>262K</span></div>
+        </div>
+
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>GPU 卸载层数</b><span>放入显存的模型层数, 拉满即全部 GPU 推理</span></div>
+            <div class="pval"><b data-sval="ngl">全部</b><em class="pbadge" data-badge="ngl">≈5.9 GB</em></div>
+          </div>
+          <input type="range" min="0" max="64" step="1" data-cfg="ngl">
+          <div class="pslider-ends"><span>0 (纯CPU)</span><span>64 (全部)</span></div>
+        </div>
+
+        <div class="form-grid" style="margin-top:14px">
+          <label>KV 缓存 K 类型</label>
+          <select class="input" data-cfg-sel="cache_k"><option>f16</option><option>q8_0</option><option>q4_0</option></select>
+          <label>KV 缓存 V 类型</label>
+          <select class="input" data-cfg-sel="cache_v"><option>f16</option><option>q8_0</option><option>q4_0</option></select>
+        </div>
+        <p class="hint">ctx 越大 KV 缓存占用越高; 缓存类型改 q8_0 可将其减半, 长上下文建议开启</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>采样参数</h3></div>
+
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>Temperature</b><span>越低越严谨, 越高越发散</span></div>
+            <div class="pval"><b data-sval="temp">1.0</b></div>
+          </div>
+          <input type="range" min="0" max="2" step="0.05" data-cfg="temp">
+          <div class="pslider-ends"><span>0.0</span><span>2.0</span></div>
+        </div>
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>Top P</b><span>核采样累积概率</span></div>
+            <div class="pval"><b data-sval="top_p">0.95</b></div>
+          </div>
+          <input type="range" min="0.1" max="1" step="0.01" data-cfg="top_p">
+          <div class="pslider-ends"><span>0.1</span><span>1.0</span></div>
+        </div>
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>Top K</b><span>候选词数量上限</span></div>
+            <div class="pval"><b data-sval="top_k">20</b></div>
+          </div>
+          <input type="range" min="1" max="100" step="1" data-cfg="top_k">
+          <div class="pslider-ends"><span>1</span><span>100</span></div>
+        </div>
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>Min P</b><span>丢弃相对概率过低的词</span></div>
+            <div class="pval"><b data-sval="min_p">0.05</b></div>
+          </div>
+          <input type="range" min="0" max="1" step="0.01" data-cfg="min_p">
+          <div class="pslider-ends"><span>0.0</span><span>1.0</span></div>
+        </div>
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>重复惩罚 Repetition Penalty</b><span>抑制复读, 1.0 为不惩罚</span></div>
+            <div class="pval"><b data-sval="repeat">1.0</b></div>
+          </div>
+          <input type="range" min="0.5" max="2" step="0.05" data-cfg="repeat">
+          <div class="pslider-ends"><span>0.5</span><span>2.0</span></div>
+        </div>
+        <div class="pslider">
+          <div class="pslider-head">
+            <div class="ptitle"><b>存在惩罚 Presence Penalty</b><span>鼓励谈论新话题</span></div>
+            <div class="pval"><b data-sval="presence">0.0</b></div>
+          </div>
+          <input type="range" min="-2" max="2" step="0.1" data-cfg="presence">
+          <div class="pslider-ends"><span>-2.0</span><span>2.0</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h3>性能与并行</h3></div>
+        <div class="form-grid">
+          <label>CPU 线程数 (空=自动)</label><input class="input" type="number" data-cfg-num="threads" min="0" max="128" placeholder="自动">
+          <label>Batch 大小</label><input class="input" type="number" data-cfg-num="batch" min="32" max="8192" step="32">
+          <label>uBatch 大小</label><input class="input" type="number" data-cfg-num="ubatch" min="16" max="4096" step="16">
+          <label>并行槽位 (多应用并发)</label><input class="input" type="number" data-cfg-num="parallel" min="1" max="16">
+        </div>
+        <p class="hint">并行槽位 &gt; 1 时上下文会被均分, 多个本机应用可同时调用 API</p>
+      </div>
+    </section>
+
+    <!-- ======== 系统设置 ======== -->
+    <section class="page" id="page-settings">
+      <div class="cards-2col">
+        <div class="card">
+          <div class="card-head"><h3>API 服务</h3></div>
+          <div class="form-grid">
+            <label>端口</label><input class="input" type="number" data-cfg-num="port" min="1" max="65535">
+            <label>监听地址</label>
+            <select class="input" data-cfg-sel="host">
+              <option value="127.0.0.1">127.0.0.1 (仅本机)</option>
+              <option value="0.0.0.0">0.0.0.0 (允许局域网)</option>
+            </select>
+          </div>
+          <p class="hint">默认仅本机应用可调用; 改 0.0.0.0 后局域网设备也能访问 API</p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>能力开关</h3></div>
+          <div class="toggle-row">
+            <div><b>关闭视觉能力</b><span>不加载 mmproj 视觉塔, 省显存 (--no-mmproj)</span></div>
+            <label class="switch"><input type="checkbox" data-cfg-chk="novision"><i></i></label>
+          </div>
+          <div class="toggle-row">
+            <div><b>Flash Attention</b><span>降低 KV 显存占用, 建议开启</span></div>
+            <label class="switch"><input type="checkbox" data-cfg-chk="flash"><i></i></label>
+          </div>
+          <div class="toggle-row">
+            <div><b>锁定内存 mlock</b><span>防止模型被换出到虚拟内存</span></div>
+            <label class="switch"><input type="checkbox" data-cfg-chk="mlock"><i></i></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3>系统信息</h3></div>
+          <div class="sysinfo">
+            <div><i>操作系统</i><b id="set-os">--</b></div>
+            <div><i>GPU</i><b id="set-gpu">--</b></div>
+            <div><i>CUDA 版本</i><b id="set-cuda">--</b></div>
+            <div><i>内存</i><b id="set-ram">--</b></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

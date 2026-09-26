@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+build/
+dist/
+installer_output/
+runtime/
+config.json
+*.gguf
+innosetup-*.exe
+.DS_Store
