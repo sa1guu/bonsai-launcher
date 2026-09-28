@@ -735,9 +735,18 @@ class Api:
             t0 = time.time()
             ntok = 0
             try:
-                self._chat_abort = requests.post(url, json=body, stream=True,
-                                                 timeout=(10, 600))
-                r = self._chat_abort
+                r = requests.post(url, json=body, stream=True, timeout=(10, 600))
+                if (r.status_code == 500
+                        and ("chat_template_kwargs" in body or "reasoning_effort" in body)
+                        and ("template" in r.text.lower() or "think" in r.text.lower()
+                             or "reasoning" in r.text.lower())):
+                    # 部分模型的 chat template 不认识思考控制参数, 去掉后自动重试一次
+                    r.close()
+                    self.log("当前模型不支持思考力度参数, 已自动按标准模式重试")
+                    body2 = {k: v for k, v in body.items()
+                             if k not in ("chat_template_kwargs", "reasoning_effort")}
+                    r = requests.post(url, json=body2, stream=True, timeout=(10, 600))
+                self._chat_abort = r
                 if r.status_code != 200:
                     self.push("chat_done", {"ok": False,
                                             "err": f"HTTP {r.status_code}: {r.text[:300]}"})

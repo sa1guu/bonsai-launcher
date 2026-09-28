@@ -48,7 +48,12 @@ const FMT_VAL = {
 };
 const FMT_BADGE = {
   ctx: () => "tokens",
-  ngl: v => "≈" + ((v >= 64 || v < 0 ? 64 : v) / 64 * 5.95).toFixed(1) + " GB 显存",
+  ngl: v => {
+    const sz = (STATE.model && STATE.model.size) || 0;
+    if (!sz) return "--";
+    const frac = (v >= 64 || v < 0) ? 1 : v / 64;
+    return "≈" + (frac * sz / 1e9).toFixed(1) + " GB 显存";
+  },
 };
 function fmtVal(key, v) { return (FMT_VAL[key] || (x => String(x)))(v); }
 function paintVal(key, v) {
@@ -172,7 +177,20 @@ function applyModel(m) {
   $("#model-size").textContent = ok ? fmtGB(m.size) : "--";
   $("#side-model-path").textContent = m.name || "未导入";
   $("#side-model-path").title = m.path || "";
-  if (ok) $("#banner-model-sub").textContent = `${m.name} · ${fmtGB(m.size)}`;
+  // 顶部横幅 + 空状态随模型变化
+  const disp = ok ? m.name.replace(/\.gguf$/i, "") : "未导入模型";
+  const nameEl = $("#banner-model-name");
+  if (nameEl) nameEl.innerHTML = ok
+    ? `${disp} <em class="tag">本地部署</em>`
+    : `未导入模型 <em class="tag warn">待导入</em>`;
+  const sub = $("#banner-model-sub");
+  if (sub) sub.textContent = ok ? `${m.name} · ${fmtGB(m.size)}`
+                                : "请在「模型管理」导入任意 GGUF 模型文件";
+  const logo = $("#banner-logo");
+  if (logo) logo.textContent = ok ? disp.replace(/[^a-zA-Z0-9]/g, "").slice(0, 2).toUpperCase() || "AI" : "AI";
+  const et = $("#chat-empty-title");
+  if (et) et.textContent = ok ? `你好, 我是本地运行的 ${disp}` : "你好, 我是本地运行的 AI 助手";
+  paintVal("ngl", parseFloat(CFG.ngl));  // 显存估算依赖模型大小
 }
 
 function applyServer(sv) {

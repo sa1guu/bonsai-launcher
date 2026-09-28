@@ -59,10 +59,10 @@
       <div class="chat-grid">
         <div class="chat-col">
           <div class="card model-banner">
-            <div class="model-badge"><span>B2</span></div>
+            <div class="model-badge"><span id="banner-logo">AI</span></div>
             <div class="model-meta">
-              <div class="model-name">Ternary-Bonsai-2-27B <em class="tag">本地部署</em></div>
-              <div class="model-sub" id="banner-model-sub">27B · PTQ1_0 三值量化 · 约 5.9 GB</div>
+              <div class="model-name" id="banner-model-name">未导入模型 <em class="tag warn">待导入</em></div>
+              <div class="model-sub" id="banner-model-sub">请在「模型管理」导入任意 GGUF 模型文件</div>
             </div>
             <div class="stat-group">
               <div class="stat"><label>GPU 使用率</label><b id="stat-gpu-util">--</b>
@@ -77,8 +77,8 @@
           <div class="card chat-card">
             <div class="chat-scroll" id="chat-scroll">
               <div class="chat-empty" id="chat-empty">
-                <div class="empty-logo">B2</div>
-                <p>你好, 我是本地运行的 Bonsai 2 27B</p>
+                <div class="empty-logo">AI</div>
+                <p id="chat-empty-title">你好, 我是本地运行的 AI 助手</p>
                 <span>所有对话都在本机完成, 数据不出端</span>
               </div>
             </div>
@@ -173,7 +173,8 @@
 
         <div class="card">
           <div class="card-head"><h3>模型文件</h3><span class="tag warn" id="model-tag">未导入</span></div>
-          <p class="hint">应用不下载 / 不内置任何模型。点下方按钮选择你 U 盘里的 <code>Ternary-Bonsai-2-27B-PTQ1_0.gguf</code> 即可, 路径会自动记住。</p>
+          <p class="hint">应用不下载 / 不内置任何模型。点下方按钮选择任意 <code>.gguf</code> 模型文件
+            (如 Ternary-Bonsai-2-27B、MiniCPM 2B 等), 路径会自动记住。</p>
           <div class="btn-row">
             <button class="btn-primary" id="btn-import-model">导入模型文件...</button>
           </div>
@@ -222,11 +223,11 @@
       </div>
 
       <div class="card">
-        <div class="card-head"><h3>上下文与显存</h3><span class="tag">官方思考模式推荐</span></div>
+        <div class="card-head"><h3>上下文与显存</h3><span class="tag">按模型调整</span></div>
 
         <div class="pslider">
           <div class="pslider-head">
-            <div class="ptitle"><b>上下文长度 ctx</b><span>注意力 KV 缓存的最大 token 窗口 (原生支持 262K)</span></div>
+            <div class="ptitle"><b>上下文长度 ctx</b><span>注意力 KV 缓存的最大 token 窗口 (上限以模型原生上下文为准)</span></div>
             <div class="pval"><b data-sval="ctx">8K</b><em class="pbadge" data-badge="ctx">tokens</em></div>
           </div>
           <input type="range" min="1024" max="262144" step="1024" data-cfg="ctx">
@@ -236,7 +237,7 @@
         <div class="pslider">
           <div class="pslider-head">
             <div class="ptitle"><b>GPU 卸载层数</b><span>放入显存的模型层数, 拉满即全部 GPU 推理</span></div>
-            <div class="pval"><b data-sval="ngl">全部</b><em class="pbadge" data-badge="ngl">≈5.9 GB</em></div>
+            <div class="pval"><b data-sval="ngl">全部</b><em class="pbadge" data-badge="ngl">--</em></div>
           </div>
           <input type="range" min="0" max="64" step="1" data-cfg="ngl">
           <div class="pslider-ends"><span>0 (纯CPU)</span><span>64 (全部)</span></div>
@@ -254,7 +255,7 @@
             <option value="off">关闭 (直接回答)</option>
           </select>
         </div>
-        <p class="hint">ctx 越大 KV 缓存占用越高; 缓存类型改 q8_0 可将其减半, 长上下文建议开启。思考力度改动即时生效, 无需重启服务 (此模型模板仅支持 标准/低/关闭 三档)</p>
+        <p class="hint">ctx 越大 KV 缓存占用越高; 缓存类型改 q8_0 可将其减半, 长上下文建议开启。思考力度改动即时生效, 无需重启服务; 不支持思考的模型会自动忽略该设置</p>
       </div>
 
       <div class="card">

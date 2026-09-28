@@ -1,10 +1,12 @@
 # Bonsai Launcher — Ternary-Bonsai-2-27B-gguf 一键部署工具 (Windows)
 
-一个现代化界面的单文件 Windows 应用，在本机一键运行 `Ternary-Bonsai-2-27B-PTQ1_0.gguf`，
+一个现代化界面的单文件 Windows 应用，在本机一键运行本地 GGUF 大模型，
 内置对话助手，并暴露 OpenAI 兼容 API 给本机其他应用调用。
+为 `Ternary-Bonsai-2-27B-PTQ1_0.gguf`（三值量化）深度优化，同时兼容任意标准 GGUF 模型
+（MiniCPM、Qwen、Gemma 等系列直接导入即用；思考力度控制在不支持的模型上自动降级）。
 
-**应用不下载、不内置任何模型文件** —— 在「模型管理」页点「导入模型文件」选中你 U 盘里的
-`Ternary-Bonsai-2-27B-PTQ1_0.gguf` 即可用，路径会自动记住，下次打开直接启动。
+**应用不下载、不内置任何模型文件** —— 在「模型管理」页点「导入模型文件」选中你的
+`.gguf` 文件即可用，路径会自动记住，下次打开直接启动。
 
 ## 界面
 
