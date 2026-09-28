@@ -386,6 +386,9 @@ class Api:
         return self.cfg
 
     def save_config(self, cfg):
+        cfg = dict(cfg)
+        if not cfg.get("model_path"):
+            cfg.pop("model_path", None)  # model_path 只能由 pick_model 修改, 防止前端旧值覆盖
         self.cfg.update(cfg)
         self._save_config()
         return True
@@ -635,6 +638,9 @@ class Api:
 
     def start_server(self, cfg=None):
         if cfg:
+            cfg = dict(cfg)
+            if not cfg.get("model_path"):
+                cfg.pop("model_path", None)  # 同上: 不允许启动请求清空已导入的模型路径
             self.cfg.update(cfg)
             self._save_config()
         if self.server_proc and self.server_proc.poll() is None:

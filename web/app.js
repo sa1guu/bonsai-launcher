@@ -283,7 +283,7 @@ $("#btn-recheck-deps").addEventListener("click", refreshDeps);
 
 $("#btn-import-model").addEventListener("click", async () => {
   const m = await api().pick_model();
-  if (m) { applyModel(m); STATE.model = m; toast("模型已导入"); }
+  if (m) { CFG.model_path = m.path; applyModel(m); STATE.model = m; toast("模型已导入"); }
 });
 
 async function startServer() {
